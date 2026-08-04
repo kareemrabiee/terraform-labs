@@ -11,8 +11,6 @@ crash.log
 # VS Code
 .vscode/
 
-# Backup
-*.bak
 
 #providers token
 terraform.tfvars
