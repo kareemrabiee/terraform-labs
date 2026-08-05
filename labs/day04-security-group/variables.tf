@@ -1,7 +1,6 @@
 variable "vpn-ip" {
     default = "167.22.45.11/32"
     description = "The IP address of the VPN client that is allowed to access the server"
-  
 }
 
 variable "https-port" {

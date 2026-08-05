@@ -1,16 +1,53 @@
 # Terraform
-.terraform/
-*.tfstate
-*.tfstate.*
-crash.log
 
-# Variables
-*.tfvars
-*.tfvars.json
+**/.terraform/*
+**/*.tfstate
+**/*.tfstate.*
+**/crash.log
 
-# VS Code
+# Terraform CLI Configuration
+.terraformrc
+terraform.rc
+
+# --------------------------------------------------
+# Variable Files
+
+# For terraform-labs:
+# Keep dev.tfvars and prod.tfvars tracked because they do NOT contain secrets.
+
+# Uncomment the following lines for production projects.
+
+# *.tfvars
+# *.tfvars.json
+
+# --------------------------------------------------
+# Override Files
+
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+
+# --------------------------------------------------
+# Terraform Plan Files
+
+*.tfplan
+*.plan
+
+# --------------------------------------------------
+# Logs
+
+*.log
+
+# --------------------------------------------------
+# IDE
+
 .vscode/
+.idea/
 
+# --------------------------------------------------
+# Operating System
 
-#providers token
-terraform.tfvars
+.DS_Store
+Thumbs.db
+desktop.ini
