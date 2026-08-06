@@ -21,3 +21,8 @@ variable "ftp-port" {
     description = "The port number for the FTP connection"
   
 }
+
+variable "instance_type" {
+    default = "t3.micro"
+}
+

@@ -100,31 +100,49 @@ This separates configuration values from the Terraform code.
 
 ---
 
-## Variable Assignment Approaches
+# Variable Value Precedence (Highest → Lowest)
 
-Terraform supports multiple ways to assign variable values.
+When the same variable is defined in multiple places, Terraform uses the following priority:
 
-- Default value inside `variables.tf`
-- `terraform.tfvars`
-- Custom variable files (`-var-file`)
-- Command line (`-var`)
-- Environment variables (`TF_VAR_*`)
+1. CLI flags (`-var` and `-var-file`) **Highest Priority**
+2. `*.auto.tfvars` files (loaded automatically)
+3. `terraform.tfvars`
+4. Environment Variables (`TF_VAR_<name>`)
+5. Variable `default` value **Lowest Priority**
 
-The lab focused on using `terraform.tfvars`.
+Example:
 
----
+```hcl
+variable "instance_type" {
+  default = "t2.micro"
+}
+```
 
-## Variable Precedence
+Environment Variable:
 
-If the same variable is defined in multiple places, Terraform follows a precedence order to determine which value to use.
+```text
+TF_VAR_instance_type=t3.micro
+```
 
-Highest priority
+terraform.tfvars:
 
-1. Command line (`-var`)
-2. Variable file (`-var-file`)
-3. Environment variables (`TF_VAR_*`)
-4. `terraform.tfvars`
-5. Default value
+```hcl
+instance_type = "t3.small"
+```
+
+Command:
+
+```bash
+terraform apply -var="instance_type=t3.large"
+```
+
+Terraform will use:
+
+```text
+t3.large
+```
+
+Because values passed through the command line have the highest priority.
 
 ---
 
@@ -140,14 +158,111 @@ During this lab:
 
 ---
 
-## Best Practices
+## Terraform Variables - Best Practices
 
-- Avoid hardcoded values whenever possible.
-- Keep Terraform configurations generic.
-- Use meaningful variable names.
-- Store environment-specific values in `.tfvars` files.
-- Define default values only when appropriate.
-- Reuse variables instead of duplicating values.
+### 1. Avoid Hardcoded Values
+Avoid writing values directly inside resources. Use variables instead to make the configuration reusable and easier to maintain.
+
+❌ Bad
+
+```hcl
+instance_type = "t3.micro"
+```
+
+✅ Good
+
+```hcl
+variable "instance_type" {}
+
+instance_type = var.instance_type
+```
+
+---
+
+### 2. Keep Configurations Generic
+Write reusable code that works across multiple environments (Dev, Test, Prod) by changing variable values instead of modifying the Terraform code.
+
+Example:
+
+```hcl
+variable "environment" {}
+
+tags = {
+  Environment = var.environment
+}
+```
+
+---
+
+### 3. Use Meaningful Variable Names
+Choose clear and descriptive variable names that explain their purpose.
+
+✅ Good
+
+```hcl
+instance_type
+aws_region
+vpc_id
+```
+
+❌ Bad
+
+```hcl
+x
+server
+value
+```
+
+---
+
+### 4. Store Environment-Specific Values in `.tfvars`
+Keep values that change between environments inside `.tfvars` files instead of hardcoding them.
+
+Example:
+
+```hcl
+# dev.tfvars
+instance_type = "t3.micro"
+
+# prod.tfvars
+instance_type = "m5.large"
+```
+
+Run:
+
+```bash
+terraform apply -var-file="dev.tfvars"
+```
+
+---
+
+### 5. Define Default Values Only When Appropriate
+Use default values only when they make sense for most deployments. Avoid defaults for sensitive or environment-specific values.
+
+```hcl
+variable "instance_type" {
+  default = "t3.micro"
+}
+```
+
+---
+
+### 6. Reuse Variables
+Reuse variables instead of repeating the same value in multiple places. This improves maintainability and makes updates easier.
+
+```hcl
+variable "instance_type" {
+  default = "t3.micro"
+}
+
+resource "aws_instance" "web1" {
+  instance_type = var.instance_type
+}
+
+resource "aws_instance" "web2" {
+  instance_type = var.instance_type
+}
+```
 
 ---
 
