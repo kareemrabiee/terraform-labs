@@ -1,4 +1,4 @@
-lookup(map, key, default)
+/* lookup(map, key, default)
 
 > lookup({a="ay", b="bee"}, "a", "what?")
 ay
@@ -43,3 +43,5 @@ Jan 02, 2018
 1
 > length("hello")
 5
+
+*/
