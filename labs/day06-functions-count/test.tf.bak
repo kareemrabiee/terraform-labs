@@ -1,0 +1,45 @@
+lookup(map, key, default)
+
+> lookup({a="ay", b="bee"}, "a", "what?")
+ay
+> lookup({a="ay", b="bee"}, "c", "what?")
+what?
+
+#-----------------------------
+element(list, index)
+> element(["a", "b", "c"], 1)
+"b"
+
+> element(["a", "b", "c"], 3)
+"a"
+
+> element(["a", "b", "c"], -1)
+"c"
+
+#-----------------------------
+
+> timestamp()
+2018-05-13T07:44:12Z
+
+formatdate(spec, timestamp)
+> formatdate("DD MMM YYYY hh:mm ZZZ", "2018-01-02T23:12:01Z")
+02 Jan 2018 23:12 UTC
+> formatdate("EEEE, DD-MMM-YY hh:mm:ss ZZZ", "2018-01-02T23:12:01Z")
+Tuesday, 02-Jan-18 23:12:01 UTC
+> formatdate("EEE, DD MMM YYYY hh:mm:ss ZZZ", "2018-01-02T23:12:01-08:00")
+Tue, 02 Jan 2018 23:12:01 -0800
+> formatdate("MMM DD, YYYY", "2018-01-02T23:12:01Z")
+Jan 02, 2018
+> formatdate("HH:mmaa", "2018-01-02T23:12:01Z")
+11:12pm
+
+#-----------------------------
+
+> length([])
+0
+> length(["a", "b"])
+2
+> length({"a" = "b"})
+1
+> length("hello")
+5
